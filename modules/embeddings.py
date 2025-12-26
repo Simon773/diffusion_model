@@ -1,4 +1,6 @@
-import numpy as np
+import math
+
+import torch
 import torch.nn as nn
 
 
@@ -7,17 +9,25 @@ class SinusoidalPositionalEmbedding(nn.Module):
         super().__init__()
         self.embedding_dim = embedding_dim
 
-    def forward(self, timesteps):
-        positions = np.arange(timesteps)[:, np.newaxis]  # Shape: (timesteps, 1)
-        dimensions = np.arange(self.embedding_dim)[
-            np.newaxis, :
-        ]  # Shape: (1, embedding_dim)
+    def forward(self, time):
+        """
+        Args: time (Tensor): Tenseur 1D contenant les indices de temps (Batch_Size,)
 
-        # Compute angles using sine for even indices and cosine for odd indices
-        angle_rates = 1 / np.power(10000, (2 * (dimensions // 2)) / self.embedding_dim)
-        angle_rads = positions * angle_rates
+        Returns:
+            Tensor: Embeddings of size (Batch_Size, dim)
+        """
+        device = time.device
+        half_dim = self.embedding_dim // 2  # for having 2i or 2i+1 dimensions
+        # using property of exp and log to compute the sinusoidal frequencies
+        # (10000^(2i/dim) = exp(log(10000) * (2i/dim)))
+        embeddings = math.log(10000) / (half_dim - 1)
+        embeddings = torch.exp(torch.arange(half_dim, device=device) * -embeddings)
 
-        pos_encoding = np.zeros_like(angle_rads)
-        pos_encoding[:, 0::2] = np.sin(angle_rads[:, 0::2])
-        pos_encoding[:, 1::2] = np.cos(angle_rads[:, 1::2])
-        return pos_encoding
+        # To have a embedding of size (Batch_Size, dim)
+        embeddings = time[:, None] * embeddings[None, :]
+
+        full_emb = torch.zeros(time.shape[0], self.embedding_dim, device=device)
+        full_emb[:, 0::2] = embeddings.sin()
+        full_emb[:, 1::2] = embeddings.cos()
+
+        return full_emb
