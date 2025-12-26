@@ -1,0 +1,35 @@
+DDPM_CelebA/
+│
+├── data/                       
+│   └── img_align_celeba/       # Celeba dataset (can have subfolder for test train split)
+│
+├── modules/                    
+│   ├── __init__.py            
+│   ├── attention.py            # Class SelfAttention
+│   ├── embeddings.py           #  SinusoidalPositionEmbeddings for the time
+│   ├── resnet_block.py         # Contient ResnetBlock
+│   └── 
+│
+├── models/                     
+│   ├── __init__.py
+│   └── unet.py                 
+│
+├── diffusion/                
+│   ├── __init__.py
+│   ├── noise_schedule.py       # with alpha and beta parameter
+│   └── ddpm.py                 # for forward (noising) and backward (sampling) process
+│
+├── utils/                     
+│   ├── __init__.py
+│   ├── dataset.py             
+│   └── visualization.py        
+│
+├── experiments/               
+│   ├── 
+│   ├── 
+│   └── 
+│
+├── checkpoints/                
+├── results/                    
+│
+└── train.py                   
