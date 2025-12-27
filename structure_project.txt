@@ -33,4 +33,5 @@ DDPM_CelebA/
 ├── README.md                
 │── REPORT.md 
 │── requirements.txt  
+│── setup.py
 └── structure_project.txt                 
