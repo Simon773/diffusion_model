@@ -1,3 +1,5 @@
+import time
+
 import torch
 import torch.nn as nn
 
@@ -53,7 +55,7 @@ class Unet(nn.Module):
 
         self.time_mlp = nn.Sequential(
             nn.SiLU(),  # better than ReLU with smoothness
-            nn.Linear(time_embedding_dim, out_channels),
+            nn.Linear(time_embedding_dim, time_embedding_dim),
         )
         self.positional_embedding = SinusoidalPositionalEmbedding(time_embedding_dim)
 
