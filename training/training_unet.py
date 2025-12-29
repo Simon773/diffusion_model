@@ -56,6 +56,8 @@ class Training_Unet:
         self.optimizer = optim.Adam(self.model.parameters(), lr=self.lr)
         self.diffusion = Diffusion(img_size=self.img_size, device=self.device)
 
+        os.makedirs("models_saved", exist_ok=True)
+
     def train(self):
         print(f"Debut entrainement avec {self.epochs} epochs...")
 
