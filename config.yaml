@@ -1,0 +1,16 @@
+run_name: "Unet_v0"
+
+dataset:
+  path: "./data/img_align_celeba"
+  img_size: 64
+
+training:
+  batch_size: 32   
+  epochs: 100
+  lr: 3.0e-4       
+  device: "cuda"   
+
+model:
+  time_dim: 32
+  in_channels: 3
+  out_channels: 3
