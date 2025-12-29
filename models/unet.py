@@ -15,13 +15,13 @@ class Down(nn.Module):
 
     def __init__(self, in_channels, out_channels, time_embedding_dim):
         super().__init__()
-        self.maxpool_conv = nn.Sequential(
-            nn.MaxPool2d(kernel_size=2, stride=2),
-            DoubleConvBlock(in_channels, out_channels, time_embedding_dim),
-        )
+        self.maxpool = nn.MaxPool2d(kernel_size=2, stride=2)
+        self.conv = DoubleConvBlock(in_channels, out_channels, time_embedding_dim)
 
-    def forward(self, x):
-        return self.maxpool_conv(x)
+    def forward(self, x, t):
+        x = self.maxpool(x)
+        x = self.conv(x, t)
+        return x
 
 
 class Up(nn.Module):
@@ -34,7 +34,7 @@ class Up(nn.Module):
         super().__init__()
 
         self.up = nn.ConvTranspose2d(
-            in_channels // 2, in_channels // 2, kernel_size=2, stride=2
+            in_channels, in_channels // 2, kernel_size=2, stride=2
         )
         self.conv = DoubleConvBlock(in_channels, out_channels, time_embedding_dim)
 
