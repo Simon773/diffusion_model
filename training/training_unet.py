@@ -1,5 +1,6 @@
 import os
 from email.mime import base
+from tabnanny import check
 
 import torch
 import torch.nn as nn
@@ -101,12 +102,29 @@ class Training_Unet:
             print(f"Epoch {epoch+1}/{self.epochs} | mean loss: {avg_loss:.4f}")
 
             # save the model every 10 epochs
-            if (epoch + 1) % 10 == 0 or (epoch + 1) == self.epochs:
+            if (epoch + 1) % 5 == 0 or (epoch + 1) == self.epochs:
                 self.save_checkpoint(epoch + 1)
 
     def save_checkpoint(self, epoch):
+        checkpoint = {
+            "epoch": epoch,
+            "model_state_dict": self.model.state_dict(),
+            "optimizer_state_dict": self.optimizer.state_dict(),
+        }
+
         save_path = os.path.join("models_saved", f"{self.run_name}_epoch_{epoch}.pt")
-        torch.save(self.model.state_dict(), save_path)
+        torch.save(checkpoint, save_path)
+
+    def load_checkpoint(self, checkpoint_path):
+        checkpoint = torch.load(checkpoint_path, map_location=self.device)
+
+        if isinstance(checkpoint, dict) and "model_state_dict" in checkpoint:
+            self.model.load_state_dict(checkpoint["model_state_dict"])
+            self.optimizer.load_state_dict(checkpoint["optimizer_state_dict"])
+
+            start_epoch = checkpoint["epoch"] + 1
+            print(f"begin the training a the epoch{start_epoch}")
+            return start_epoch
 
 
 if __name__ == "__main__":
