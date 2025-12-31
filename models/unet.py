@@ -50,7 +50,7 @@ class Unet(nn.Module):
     U-Net architecture implementation.
     """
 
-    def __init__(self, in_channels, out_channels, time_embedding_dim):
+    def __init__(self, in_channels, out_channels, base_channels, time_embedding_dim):
         super().__init__()
 
         self.time_mlp = nn.Sequential(
@@ -60,22 +60,24 @@ class Unet(nn.Module):
         self.positional_embedding = SinusoidalPositionalEmbedding(time_embedding_dim)
 
         self.input_conv = DoubleConvBlock(
-            in_channels, 64, time_emb_dim=time_embedding_dim
+            in_channels, base_channels, time_emb_dim=time_embedding_dim
         )
 
-        self.down1 = Down(64, 128, time_embedding_dim)
-        self.down2 = Down(128, 256, time_embedding_dim)
-        self.down3 = Down(256, 512, time_embedding_dim)
-        self.down4 = Down(512, 1024, time_embedding_dim)
+        self.down1 = Down(base_channels, base_channels * 2, time_embedding_dim)
+        self.down2 = Down(base_channels * 2, base_channels * 4, time_embedding_dim)
+        self.down3 = Down(base_channels * 4, base_channels * 8, time_embedding_dim)
+        self.down4 = Down(base_channels * 8, base_channels * 16, time_embedding_dim)
 
-        self.bottom = DoubleConvBlock(1024, 1024, time_embedding_dim)
+        self.bottom = DoubleConvBlock(
+            base_channels * 16, base_channels * 16, time_embedding_dim
+        )
 
-        self.up1 = Up(1024, 512, time_embedding_dim)
-        self.up2 = Up(512, 256, time_embedding_dim)
-        self.up3 = Up(256, 128, time_embedding_dim)
-        self.up4 = Up(128, 64, time_embedding_dim)
+        self.up1 = Up(base_channels * 16, base_channels * 8, time_embedding_dim)
+        self.up2 = Up(base_channels * 8, base_channels * 4, time_embedding_dim)
+        self.up3 = Up(base_channels * 4, base_channels * 2, time_embedding_dim)
+        self.up4 = Up(base_channels * 2, base_channels, time_embedding_dim)
 
-        self.output_conv = nn.Conv2d(64, out_channels, kernel_size=1)
+        self.output_conv = nn.Conv2d(base_channels, out_channels, kernel_size=1)
 
     def forward(self, x, t):
         t_emb = self.positional_embedding.forward(t)

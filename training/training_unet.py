@@ -1,4 +1,5 @@
 import os
+from email.mime import base
 
 import torch
 import torch.nn as nn
@@ -24,6 +25,7 @@ class Training_Unet:
         device,
         time_embedding_dim,
         in_channels,
+        base_channels,
         out_channels,
     ):
         self.run_name = run_name
@@ -51,6 +53,7 @@ class Training_Unet:
         self.model = Unet(
             in_channels=in_channels,
             out_channels=out_channels,
+            base_channels=base_channels,
             time_embedding_dim=time_embedding_dim,
         ).to(self.device)
         self.optimizer = optim.Adam(self.model.parameters(), lr=self.lr)
@@ -119,6 +122,7 @@ if __name__ == "__main__":
             device=config["training"]["device"],
             time_embedding_dim=config["model"]["time_dim"],
             in_channels=config["model"]["in_channels"],
+            base_channels=config["model"]["base_channels"],
             out_channels=config["model"]["out_channels"],
         )
         trainer.train()
