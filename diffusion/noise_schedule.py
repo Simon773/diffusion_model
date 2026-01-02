@@ -1,13 +1,14 @@
 import torch
+from tqdm import tqdm
 
 
 class Diffusion:
     def __init__(
         self,
+        img_size,
         noise_steps=1000,
         beta_start=1e-4,
         beta_end=0.02,
-        img_size=64,
         device="cuda",
     ):
         self.noise_steps = noise_steps
@@ -53,3 +54,42 @@ class Diffusion:
         return torch.randint(
             low=1, high=self.noise_steps, size=(n,), device=self.device
         )
+
+    def reverse_diffusion(self, model, n_samples):
+        """
+        Generates samples by reversing the diffusion process
+        """
+        model.eval()
+
+        with torch.no_grad():
+            # we start from pure noise
+            x = torch.randn((n_samples, 3, self.img_size, self.img_size)).to(
+                self.device
+            )
+
+            for i in tqdm(reversed(range(1, self.noise_steps)), position=0):
+                # we create a tensor filled with the timestep i of size n_samples
+                t = (torch.ones(n_samples) * i).long().to(self.device)
+                # the model predicts the noise at step t
+                predicted_noise = model(x, t)
+
+                alpha = self.alpha[t][:, None, None, None]
+                alpha_hat = self.alpha_hat[t][:, None, None, None]
+                beta = self.beta[t][:, None, None, None]
+
+                # we add noise only if we are not in the last step
+                if i > 1:
+                    noise = torch.randn_like(x)
+                else:
+                    noise = torch.zeros_like(x)
+
+                # equation of sampling to get x t-1 from x_t
+                x = (1 / torch.sqrt(alpha)) * (
+                    x - ((1 - alpha) / (torch.sqrt(1 - alpha_hat))) * predicted_noise
+                ) + torch.sqrt(beta) * noise
+
+        model.train()
+        x = (x.clamp(-1, 1) + 1) / 2
+        x = (x * 255).type(torch.uint8)
+
+        return x
