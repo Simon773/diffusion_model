@@ -62,10 +62,10 @@ class Training_Unet:
 
         os.makedirs("models_saved", exist_ok=True)
 
-    def train(self):
+    def train(self, start_epoch=0):
         print(f"Debut entrainement avec {self.epochs} epochs...")
 
-        for epoch in range(self.epochs):
+        for epoch in range(start_epoch, self.epochs):
             self.model.train()
             # barre of progress to see the training
             pbar = tqdm(self.dataloader)
