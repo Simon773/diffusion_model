@@ -111,7 +111,7 @@ class Training_Unet:
             "model_state_dict": self.model.state_dict(),
             "optimizer_state_dict": self.optimizer.state_dict(),
         }
-
+        os.makedirs("models_saved", exist_ok=True)
         save_path = os.path.join("models_saved", f"{self.run_name}_epoch_{epoch}.pt")
         torch.save(checkpoint, save_path)
 
