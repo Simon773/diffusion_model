@@ -3,7 +3,7 @@ import os
 from torchvision.utils import save_image
 
 
-def save_generated_images(images, path="/generated_images/resultat.png"):
+def save_generated_images(images, path="generated_images/resultat.png"):
 
     folder = os.path.dirname(path)
     if folder and not os.path.exists(folder):
@@ -21,7 +21,7 @@ if __name__ == "__main__":
     from models.unet import Unet
 
     checkpoint_path = "models_save/Unet_V0_epoch_100.pt"
-    device = "gpu"
+    device = "cuda"
 
     model = Unet(
         in_channels=3,
@@ -61,4 +61,4 @@ if __name__ == "__main__":
 
     save_path = "/generated_images/resultat.png"
     save_image(generated_images, save_path, normalize=True, value_range=(-1, 1))
-    print(f"✅ Image sauvegardée sous : {save_path}")
+    print(f"Image sauvegardée sous : {save_path}")

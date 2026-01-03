@@ -89,7 +89,7 @@ class Diffusion:
                 ) + torch.sqrt(beta) * noise
 
         model.train()
-        x = (x.clamp(-1, 1) + 1) / 2
-        x = (x * 255).type(torch.uint8)
+        # x = (x.clamp(-1, 1) + 1) / 2
+        # x = (x * 255).type(torch.uint8)
 
         return x
