@@ -40,7 +40,7 @@ To run this project you need to create a conda environnement.
    ```
 Then for create the conda environnement and download required packages, you can use this command :
    ```bash
-    conda create --name diffusion_env python=3.10 -y
+    conda create --name diffusion_env python=3.12 -y
     conda activate diffusion_env
 
     pip install -r requirements.txt
@@ -56,3 +56,36 @@ Then for create the conda environnement and download required packages, you can 
 
 - **diffusion** : This folder contain only one file : noise_schedule.py. There are functions for add noise to an image, reverse the noise.
 
+- **generated_images** : This folder contains some generated images. 
+
+- **models**: A folder for model that we can use. Here there is only the Unet model in pytorch format with the forward process
+
+- **models_save** : Not included. A folder where you can add your model in .pt format. Model use in this project is available in [Huggin Face](https://www.kaggle.com/datasets/jessicali9530/celeba-dataset).
+
+-**modules**. Contrains file useful for the implementation of U-Net architecture (double convolutiion block, sinusidal positional embeddings...)
+
+-**test**: Sandbox for tests such that,see generated images...
+
+-**training**: Folder useful to train U-Net and generate image
+
+
+## Training : 
+In order to train the model, you can use your own computer and run this file:
+Note : for training, you can modify config.yaml 
+```bash
+python -m training.training_unet
+```
+or train the model in Google Colab or Kaggle Notebook with a notebook : 
+```bash
+training_kaggle.ipynb
+```
+
+## Generation:
+Same as before you can generate in your own computer or in Google Colab or Kaggle Notebook : 
+```bash
+python -m tests.test_generated_image.py
+```
+with Googe Colab :
+```bash
+generate_images_colab.ipynb
+```
