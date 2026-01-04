@@ -1,13 +1,12 @@
 
-# 🧠 Diffusion Models (DDPM) Implementation on CelebA
+# Diffusion Models (DDPM) Implementation on CelebA
 
-[![PyTorch](https://img.shields.io/badge/PyTorch-%23EE4C2C.svg?style=for-the-badge&logo=PyTorch&logoColor=white)](https://pytorch.org/) [![Python](https://img.shields.io/badge/Python-3.12-blue?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![PyTorch](https://img.shields.io/badge/PyTorch-%23EE4C2C.svg?style=for-the-badge&logo=PyTorch&logoColor=white)](https://pytorch.org/) [![Hugging Face](https://img.shields.io/badge/Hugging%20Face-Model-yellow?style=for-the-badge&logo=huggingface&logoColor=black)](https://huggingface.co/Heatzy-773/U-Net)
 
 This project show the implementation of Denoising Diffusion Probabilistic Models (DDPM) for high-quality image synthesis. The model is trained on the CelebA face dataset using a custom **U-Net** architecture as the noise prediction network.
 
 ![Generated Results](generated_images/gen_image_128_1.png)
-
-
+WIP
 
 ## Objectives
 
@@ -83,7 +82,7 @@ training_kaggle.ipynb
 ## Generation:
 Same as before you can generate in your own computer or in Google Colab or Kaggle Notebook : 
 ```bash
-python -m tests.test_generated_image.py
+python -m tests.test_generated_image.py #WIP
 ```
 with Googe Colab :
 ```bash
