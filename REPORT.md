@@ -60,11 +60,12 @@ We do not simply feed the scalar $t$ (which would be too weak a signal). Instead
 or a given timestep $t$ and an embedding dimension $d$ (e.g., 64 or 32), the embedding vector $e_t$ is constructed using pairs of sine and cosine functions with geometrically progressing frequencies:
 
 $$
-\begin{aligned}
-e_t[2i] &= \sin(t / 10000^{2i/d}) \\
-e_t[2i+1] &= \cos(t / 10000^{2i/d})
-\end{aligned}
+e_t[2i] = \sin(t / 10000^{2i/d})
 $$
+$$
+e_t[2i+1] = \cos(t / 10000^{2i/d})
+$$
+
 where $i$ represents the dimension index from $0$ to $d/2$.
 Once we have the raw vector, we create a MLP: The fixed sinusoidal vector passes through a small Multi-Layer Perceptron (Linear $\to$ SiLU (smooth ReLU) Activation $\to$ Linear). This allows the network to learn a non-linear representation of time specifically for the denoising task.
 
